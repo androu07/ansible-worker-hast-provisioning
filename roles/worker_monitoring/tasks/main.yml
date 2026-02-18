@@ -9,7 +9,7 @@
     group: root
     mode: '0755'
   tags:
-    - monitoring_setup
+    - monitoring_directory
 
 - name: Load IPMI kernel modules
   modprobe:
@@ -19,7 +19,6 @@
     - ipmi_devintf
     - ipmi_si
   tags:
-    - monitoring_setup
     - ipmi
 
 - name: Make IPMI modules persistent
@@ -31,7 +30,6 @@
     - ipmi_devintf
     - ipmi_si
   tags:
-    - monitoring_setup
     - ipmi
 
 - name: Deploy ipmi.yml configuration
@@ -42,7 +40,6 @@
     group: root
     mode: '0644'
   tags:
-    - monitoring_setup
     - ipmi
 
 - name: Deploy docker-compose.yml for monitoring
@@ -53,7 +50,6 @@
     group: root
     mode: '0644'
   tags:
-    - monitoring_setup
     - docker
 
 - name: Start monitoring services with docker compose
@@ -62,9 +58,7 @@
     state: present
     pull: yes
   tags:
-    - monitoring_setup
     - docker
-    - start_services
 
 - name: Display monitoring setup completion
   debug:
