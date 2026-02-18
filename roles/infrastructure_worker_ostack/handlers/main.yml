@@ -1,0 +1,12 @@
+---
+# ===== Handlers for Infrastructure Worker OpenStack =====
+
+- name: restart nova-compute
+  systemd:
+    name: nova-compute
+    state: restarted
+
+- name: restart neutron-openvswitch-agent
+  systemd:
+    name: neutron-openvswitch-agent
+    state: restarted

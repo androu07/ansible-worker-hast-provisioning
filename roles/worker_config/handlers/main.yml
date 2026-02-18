@@ -1,0 +1,7 @@
+---
+# ===== Handlers for Worker Config =====
+
+- name: restart chrony
+  systemd:
+    name: chrony
+    state: restarted

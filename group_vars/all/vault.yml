@@ -1,0 +1,18 @@
+---
+# ===== OpenStack Passwords =====
+admin_pass: 
+rabbit_pass: 
+keystone_dbpass: 
+glance_dbpass: 
+glance_pass: 
+nova_dbpass: 
+nova_pass: 
+placement_dbpass: 
+placement_pass: 
+neutron_dbpass: 
+neutron_pass: 
+metadata_secret: 
+cinder_dbpass: 
+cinder_pass: 
+dash_dbpass: 
+demo_pass: 

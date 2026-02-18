@@ -1,0 +1,27 @@
+---
+# ===== Role: Worker Config =====
+
+- name: General worker configuration
+  import_tasks: general_config.yml
+  tags:
+    - general_config
+    - worker_config
+
+- name: Install OpenStack prerequisites
+  import_tasks: openstack_preconfig.yml
+  tags:
+    - openstack_preconfig
+    - worker_config
+
+- name: Display worker config completion
+  debug:
+    msg:
+      - ""
+      - "========================================="
+      - "Workers Config Completed"
+      - "========================================="
+      - ""
+  tags:
+    - openstack_preconfig
+    - general_config
+    - worker_config

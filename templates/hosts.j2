@@ -1,0 +1,16 @@
+127.0.0.1 localhost
+127.0.1.1 {{ inventory_hostname }}
+
+# OpenStack Cluster Nodes
+192.168.4.210 hast-hn controller
+192.168.4.211 hast-wn1 compute1
+192.168.4.212 hast-wn2 compute2
+192.168.4.213 hast-wn3 compute3
+192.168.4.214 hast-wn4 compute4
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters

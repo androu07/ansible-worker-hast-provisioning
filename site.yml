@@ -1,0 +1,25 @@
+---
+# ===== SITE.YML - Master Playbook =====
+
+- name: "Configure Openstack in Workers"
+  import_playbook: playbooks/openstack-workers.yml
+  tags:
+    - workers_ostack
+
+- name: "Configure Monitoring in Workers"
+  import_playbook: playbooks/worker-monitoring.yml
+  tags:
+    - workers_monitoring
+
+- name: Summary
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Display deployment summary
+      debug:
+        msg:
+          - ""
+          - "========================================="
+          - "Workers configured and monitoring enabled"
+          - "========================================="
+          - ""

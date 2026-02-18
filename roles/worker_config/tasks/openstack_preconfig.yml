@@ -1,0 +1,63 @@
+---
+# ===== OpenStack Pre-configuration (Package Installation) =====
+
+# OpenStack client and dependencies
+- name: Install software-properties-common
+  apt:
+    name: software-properties-common
+    state: present
+    update_cache: yes
+  tags:
+    - openstack_version
+
+- name: Add OpenStack {{ openstack_release }} repository
+  command: add-apt-repository cloud-archive:{{ openstack_release }} -y
+  args:
+    creates: /etc/apt/sources.list.d/cloudarchive-{{ openstack_release }}.list
+  tags:
+    - openstack_version
+
+- name: Update apt cache after adding repository
+  apt:
+    update_cache: yes
+  tags:
+    - openstack_version
+
+- name: Install OpenStack client and dependencies
+  apt:
+    name:
+      - python3-openstackclient
+      - cloud-guest-utils
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+  retries: 3
+  delay: 5
+  register: apt_result
+  until: apt_result is succeeded
+  tags:
+    - openstack_install
+
+# Install Nova compute
+- name: Install nova-compute package
+  apt:
+    name: nova-compute
+    state: present
+  tags:
+    - nova-compute_install
+
+# Install Neutron OVS agent
+- name: Install Neutron OVS agent
+  apt:
+    name:
+      - neutron-openvswitch-agent
+    state: present
+  tags:
+    - neutron-compute_install
+
+- name: Get management IP address
+  set_fact:
+    mgmt_ip: "{{ ansible_facts[mgmt_network_interface]['ipv4']['address'] }}"
+  when: mgmt_network_interface is defined and mgmt_network_interface in ansible_facts
+  tags:
+    - neutron-compute_install

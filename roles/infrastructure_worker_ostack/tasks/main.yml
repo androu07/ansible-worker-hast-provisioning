@@ -1,0 +1,24 @@
+---
+# ===== Role: Infrastructure Worker OpenStack =====
+
+- name: Configure Nova Compute
+  import_tasks: nova-compute.yml
+  tags:
+    - infrastructure_worker_ostack
+    - nova-compute
+
+- name: Configure Neutron Compute
+  import_tasks: neutron-compute.yml
+  tags:
+    - infrastructure_worker_ostack
+    - neutron-compute
+
+- name: Display infrastructure worker completion
+  debug:
+    msg:
+      - ""
+      - "========================================="
+      - "Infrastructure Worker OpenStack Configured"
+      - "========================================="
+  tags:
+    - infrastructure_worker_ostack

@@ -1,0 +1,28 @@
+services:
+  # --- Node Exporter (OS: CPU, RAM, Disco) ---
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: always
+    network_mode: "host"
+    pid: "host"
+    volumes:
+      - '/:/host:ro,rslave'
+    command:
+      - '--path.rootfs=/host'
+      - '--web.listen-address=0.0.0.0:9100'
+
+  # --- IPMI Exporter (Hardware: Temp, Watts) ---
+  ipmi-exporter:
+    image: prometheuscommunity/ipmi-exporter:latest
+    container_name: ipmi-exporter
+    restart: always
+    network_mode: "host"
+    privileged: true
+    devices:
+      - /dev/ipmi0:/dev/ipmi0
+    volumes:
+      - ./ipmi.yml:/config/ipmi.yml
+    command:
+      - '--config.file=/config/ipmi.yml'
+      - '--web.listen-address=0.0.0.0:9290'

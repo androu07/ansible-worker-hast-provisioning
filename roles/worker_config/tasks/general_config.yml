@@ -1,0 +1,75 @@
+---
+# ===== General Worker Configuration =====
+
+- name: Extract worker number from hostname
+  set_fact:
+    worker_number: "{{ inventory_hostname | regex_replace('^.*?(\\d+)$', '\\1') }}"
+  tags:
+    - netplan
+
+# Netplan file
+- name: Deploy netplan configuration
+  template:
+    src: /etc/ansible/templates/netplan.j2
+    dest: /etc/netplan/00-installer-config.yaml
+    owner: root
+    group: root
+    mode: '0600'
+    backup: yes
+  tags:
+    - netplan
+
+- name: Apply netplan configuration
+  command: netplan apply
+  tags:
+    - netplan
+
+# Hosts file
+- name: Deploy 'hosts' file
+  template:
+    src: /etc/ansible/templates/hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: '0644'
+    backup: yes
+  tags:
+    - hosts
+
+# Timezone
+- name: Set timezone
+  timezone:
+    name: "{{ timezone }}"
+  tags:
+    - timezone
+
+# NTP Service (Chrony)
+- name: Install chrony for time synchronization
+  apt:
+    name: chrony
+    state: present
+    update_cache: yes
+  tags:
+    - chrony
+    - ntp
+
+- name: Configure chrony to sync with controller
+  lineinfile:
+    path: /etc/chrony/chrony.conf
+    regexp: '^server\s+{{ controller_hostname }}\s+'
+    line: "server {{ controller_hostname }} iburst"
+    insertafter: '^# Use public servers'
+    backup: yes
+  notify: restart chrony
+  tags:
+    - chrony
+    - ntp
+
+- name: Ensure chrony is started and enabled
+  systemd:
+    name: chrony
+    state: started
+    enabled: yes
+  tags:
+    - chrony
+    - ntp

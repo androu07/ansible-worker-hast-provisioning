@@ -1,0 +1,78 @@
+---
+# ===== Worker Monitoring Setup =====
+
+- name: Create monitoring directory
+  file:
+    path: /root/monitoring-client
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  tags:
+    - monitoring_setup
+
+- name: Load IPMI kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - ipmi_devintf
+    - ipmi_si
+  tags:
+    - monitoring_setup
+    - ipmi
+
+- name: Make IPMI modules persistent
+  lineinfile:
+    path: /etc/modules
+    line: "{{ item }}"
+    create: yes
+  loop:
+    - ipmi_devintf
+    - ipmi_si
+  tags:
+    - monitoring_setup
+    - ipmi
+
+- name: Deploy ipmi.yml configuration
+  template:
+    src: /etc/ansible/templates/ipmi.yml.j2
+    dest: /root/monitoring-client/ipmi.yml
+    owner: root
+    group: root
+    mode: '0644'
+  tags:
+    - monitoring_setup
+    - ipmi
+
+- name: Deploy docker-compose.yml for monitoring
+  template:
+    src: /etc/ansible/templates/docker-compose.yml.j2
+    dest: /root/monitoring-client/docker-compose.yml
+    owner: root
+    group: root
+    mode: '0644'
+  tags:
+    - monitoring_setup
+    - docker
+
+- name: Start monitoring services with docker compose
+  docker_compose:
+    project_src: /root/monitoring-client
+    state: present
+    pull: yes
+  tags:
+    - monitoring_setup
+    - docker
+    - start_services
+
+- name: Display monitoring setup completion
+  debug:
+    msg:
+      - ""
+      - "========================================="
+      - "Worker Monitoring Setup Completed"
+      - "========================================="
+      - ""
+  tags:
+    - monitoring_setup

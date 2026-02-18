@@ -1,0 +1,21 @@
+# ===== Global Vars for Workers =====
+
+# ----- Timezone -----
+timezone: America/Lima
+
+# ----- OpenStack Configuration -----
+controller_hostname: controller
+openstack_region: RegionOne
+openstack_release: victoria
+
+# ----- RabbitMQ -----
+rabbit_user: openstack
+
+# ----- VNC -----
+vnc_proxy_base_url: "http://controller:6080/vnc_auto.html"
+
+# ----- Neutron -----
+neutron_bridge_mappings: "provider:br-vlan"
+
+# ----- Managament Network Interface on Workers -----
+mgmt_network_interface: ens3
