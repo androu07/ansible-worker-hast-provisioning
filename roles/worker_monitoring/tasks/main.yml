@@ -69,4 +69,6 @@
       - "========================================="
       - ""
   tags:
-    - monitoring_setup
+    - monitoring_directory
+    - ipmi
+    - docker
