@@ -52,11 +52,12 @@
   tags:
     - docker
 
-- name: Start monitoring services with docker compose
-  docker_compose:
-    project_src: /root/monitoring-client
-    state: present
-    pull: yes
+- name: Start monitoring services
+  shell: docker compose up -d
+  args:
+    chdir: /root/monitoring-client
+  register: docker_output
+  changed_when: "'Created' in docker_output.stdout or 'Recreated' in docker_output.stdout"
   tags:
     - docker
 

@@ -10,13 +10,14 @@ services:
       - '/:/host:ro,rslave'
     command:
       - '--path.rootfs=/host'
-      - '--web.listen-address=0.0.0.0:9100'
+      - '--web.listen-address={{ ansible_host }}:9100'
 
   # --- IPMI Exporter (Hardware: Temp, Watts) ---
   ipmi-exporter:
     image: prometheuscommunity/ipmi-exporter:latest
     container_name: ipmi-exporter
     restart: always
+    user: root
     network_mode: "host"
     privileged: true
     devices:
@@ -25,4 +26,4 @@ services:
       - ./ipmi.yml:/config/ipmi.yml
     command:
       - '--config.file=/config/ipmi.yml'
-      - '--web.listen-address=0.0.0.0:9290'
+      - '--web.listen-address={{ ansible_host }}:9290'
